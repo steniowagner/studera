@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/steniowagner/studera/issues"
   },
-  "homepage": "https://github.com/steniowagner/studera#readme"
+  "homepage": "https://github.com/steniowagner/studera#readme",
+  "dependencies": {
+    "pdf-parse": "https://github.com/steniowagner/pdf-parse-fork/tarball/2c202237d7a5ee6cf5ea3ef531d713e48c26d7af"
+  }
 }

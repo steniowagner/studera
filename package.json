@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx ts-node src/index.ts"
+    "start:dev": "npx ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/steniowagner/studera#readme",
   "dependencies": {
+    "@pinecone-database/pinecone": "^0.1.6",
+    "langchain": "^0.0.139",
     "pdf-parse": "https://github.com/steniowagner/pdf-parse-fork/tarball/2c202237d7a5ee6cf5ea3ef531d713e48c26d7af"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 import path from "path";
 
-import { readPdf } from "./utils/read-pdf";
+import { readPdf, splitContentInDocuments } from "./utils";
 
 const testFilePath = path.join(
   __dirname,
@@ -11,7 +11,12 @@ const testFilePath = path.join(
 
 const run = async () => {
   const content = await readPdf(testFilePath);
-  console.log(content);
+  const documents = await splitContentInDocuments(
+    content ?? "",
+    "1-OS-Overview"
+  );
+  console.log(documents);
+  // console.log(content);
 };
 
 run();

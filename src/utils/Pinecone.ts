@@ -26,4 +26,28 @@ export class Pinecone {
       textKey: "text",
     });
   };
+
+  private getVectorStore = async () => {
+    const pineconeIndex = this.client.Index(
+      process.env.PINECONE_INDEX_NAME ?? ""
+    );
+    const embeddings = new OpenAIEmbeddings({
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      modelName: "text-embedding-ada-002",
+    });
+    return PineconeStore.fromExistingIndex(embeddings, {
+      namespace: process.env.PINECONE_NAMESPACE,
+      pineconeIndex,
+      textKey: "text",
+    });
+  };
+
+  public findSimilarVectors = async (prompt: string) => {
+    const vectorStore = await this.getVectorStore();
+    const similarties = await vectorStore.similaritySearch(prompt);
+    const similarVectors = similarties
+      .map((similarity) => similarity.pageContent)
+      .join("");
+    return similarVectors;
+  };
 }

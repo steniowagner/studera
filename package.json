@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "upload-document": "npx ts-node src/upload-file-to-pinecone.ts"
+    "upload-document": "npx ts-node src/upload-file-to-pinecone.ts",
+    "generate:multi-answer-questions": "npx ts-node src/generators/generate-multi-answer-questions.ts"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "dependencies": {
     "@pinecone-database/pinecone": "^0.1.6",
     "langchain": "^0.0.139",
+    "openai": "^4.4.0",
     "pdf-parse": "https://github.com/steniowagner/pdf-parse-fork/tarball/2c202237d7a5ee6cf5ea3ef531d713e48c26d7af"
   },
   "devDependencies": {

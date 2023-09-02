@@ -52,10 +52,7 @@ const writeQuestionsFile = async (
       }\n\n> Questions:\n${questions.join("\n\n---\n\n")}`;
     })
     .join("\n\n#\n\n");
-  await writeTXTFile(
-    `${process.env.PINECONE_NAMESPACE}-open-answer-questions`,
-    content
-  );
+  await writeTXTFile(`${process.argv[2]}-open-answer-questions`, content);
 };
 
 const writeAnswersFile = async (openAnswerQuestions: OpenAnswerQuestion[]) => {
@@ -70,10 +67,7 @@ const writeAnswersFile = async (openAnswerQuestions: OpenAnswerQuestion[]) => {
       }\n\n> Answers:\n\n${answers.join("\n\n---\n\n")}`;
     })
     .join("\n\n#\n\n");
-  await writeTXTFile(
-    `${process.env.PINECONE_NAMESPACE}-open-answer-answers`,
-    content
-  );
+  await writeTXTFile(`${process.argv[2]}-open-answer-answers`, content);
 };
 
 export const generateOpenAnswerQuestions = async () => {

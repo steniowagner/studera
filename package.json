@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "upload-document": "npx ts-node src/upload-file-to-pinecone.ts",
-    "generate:multi-answer-questions": "npx ts-node src/generators/generate-multi-answer-questions.ts",
-    "generate:open-answer-questions": "npx ts-node src/generators/generate-open-answer-questions.ts"
+    "upload-document": "npx ts-node src/upload-file-to-pinecone.ts 1-OS-Overview.pdf",
+    "generate:multi-answer-questions": "npx ts-node src/generators/generate-multi-answer-questions.ts 1-OS-Overview.pdf",
+    "generate:open-answer-questions": "npx ts-node src/generators/generate-open-answer-questions.ts 1-OS-Overview.pdf"
   },
   "repository": {
     "type": "git",

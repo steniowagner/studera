@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "upload-document": "npx ts-node src/upload-file-to-pinecone.ts",
-    "generate:multi-answer-questions": "npx ts-node src/generators/generate-multi-answer-questions.ts"
+    "generate:multi-answer-questions": "npx ts-node src/generators/generate-multi-answer-questions.ts",
+    "generate:open-answer-questions": "npx ts-node src/generators/generate-open-answer-questions.ts"
   },
   "repository": {
     "type": "git",

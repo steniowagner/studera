@@ -4,7 +4,7 @@ import { Pinecone, Gpt } from "../utils";
 import * as prompts from "./prompts";
 import config from "./config";
 
-const learningObjectivesPrompt = `Considering that our aim is "[aim]", generate [number_of_questions] learning objectives for this training material.
+const multiAnswerPrompt = `Considering that our aim is "[aim]", generate [number_of_multi_answer_questions] learning objectives for this training material.
 A learning objective need to describe a specific outcome and make clear what a "[role]" in the industry "[industry]" needs to know and/or do to achieve that outcome, in no more than 30 words, and it should start with a present tense verb.
 
 For each learning objective listed, we want to generate from [min_statements] to [max_statements] statements.
@@ -29,7 +29,7 @@ Present the results following this JSON structure:
   "learning_objective": <learning objective>
   "statements": [{
     "statement": <description of the statement>
-    "value": <if it's true (T) or false (F)>
+    "answer": <if it's true (T) or false (F)>
     "feedback": <explanation about why the statement it's True or False>
   }]
 }]
@@ -40,7 +40,7 @@ export const generateMultiAnswerQuestions = async () => {
   await pinecone.init();
   const gpt = new Gpt();
   const aim = await generateAim(pinecone, gpt);
-  const prompt = interpolatePrompt(learningObjectivesPrompt, {
+  const prompt = interpolatePrompt(multiAnswerPrompt, {
     ...config,
     aim,
   });

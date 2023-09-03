@@ -1,8 +1,19 @@
 import { interpolatePrompt } from "./interpolate-prompt";
 import { generateAim } from "./generate-aim";
-import { Pinecone, Gpt } from "../utils";
+import { Pinecone, Gpt, writeTXTFile } from "../utils";
 import * as prompts from "./prompts";
 import config from "./config";
+
+type Statement = {
+  statement: string;
+  answer: string;
+  feedback: string;
+};
+
+type MultiAnswerQuestion = {
+  learning_objective: string;
+  statements: Statement[];
+};
 
 const multiAnswerPrompt = `Considering that our aim is "[aim]", generate [number_of_multi_answer_questions] learning objectives for this training material.
 A learning objective need to describe a specific outcome and make clear what a "[role]" in the industry "[industry]" needs to know and/or do to achieve that outcome, in no more than 30 words, and it should start with a present tense verb.
@@ -35,6 +46,39 @@ Present the results following this JSON structure:
 }]
 `;
 
+const writeQuestionsFile = async (
+  multiAnswerQuestions: MultiAnswerQuestion[]
+) => {
+  const content = multiAnswerQuestions
+    .map((openAnswerQuestion) => {
+      const statements = openAnswerQuestion.statements.map(
+        ({ statement }) => `[ ] ${statement}`
+      );
+      return `* Learning Objective: ${
+        openAnswerQuestion.learning_objective
+      }\n\n> Statements:\n${statements.join("\n")}`;
+    })
+    .join("\n\n#\n\n");
+  await writeTXTFile(`${process.argv[2]}-multi-answer-questions`, content);
+};
+
+const writeAnswersFile = async (
+  multiAnswerQuestions: MultiAnswerQuestion[]
+) => {
+  const content = multiAnswerQuestions
+    .map((openAnswerQuestion) => {
+      const answers = openAnswerQuestion.statements.map(
+        (statement) =>
+          `Statement: ${statement.statement}\nAnswer: ${statement.answer}\nFeedback: ${statement.feedback}`
+      );
+      return `* Learning Objective: ${
+        openAnswerQuestion.learning_objective
+      }\n\n> Answers:\n\n${answers.join("\n\n---\n\n")}`;
+    })
+    .join("\n\n#\n\n");
+  await writeTXTFile(`${process.argv[2]}-multi-answer-answers`, content);
+};
+
 export const generateMultiAnswerQuestions = async () => {
   const pinecone = new Pinecone();
   await pinecone.init();
@@ -47,7 +91,13 @@ export const generateMultiAnswerQuestions = async () => {
   const similarities = await pinecone.findSimilarVectors(prompt);
   const gptPrompt = `${prompts.guidelines}\nContext:${similarities}\nTask: ${prompt}`;
   const answer = await gpt.ask(gptPrompt);
-  console.log(answer.choices[0].message.content);
+  const multiAnswerQuestions = JSON.parse(
+    answer.choices[0].message.content ?? ""
+  ) as MultiAnswerQuestion[];
+  await Promise.all([
+    writeQuestionsFile(multiAnswerQuestions),
+    writeAnswersFile(multiAnswerQuestions),
+  ]);
 };
 
 (async () => {
